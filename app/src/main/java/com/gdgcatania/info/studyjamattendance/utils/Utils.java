@@ -17,6 +17,6 @@ public class Utils {
 
     public static final String BROADCAST_RECEIVER_ACTION_USERS = "com.gdgcatania.info.studyjamattendance.service.service.receiver.intent.action.USERS";
 
-    public static final String INTENT_EMAIL = "DETAILS EMAIL";
+    public static final String INTENT_USER_ID = "DETAILS EMAIL";
 
 }

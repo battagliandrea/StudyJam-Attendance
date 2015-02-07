@@ -36,6 +36,7 @@ public class StudyJamAttendanceContract {
         public static Uri buildUsersUriWithId(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }
+
     }
 
     public static final class LessonsEntry implements BaseColumns {
@@ -47,7 +48,6 @@ public class StudyJamAttendanceContract {
 
         public static final String TABLE_NAME = "lessons";
 
-        //public static final String COLUMN_USERS_ID = "user_id";
         public static final String COLUMN_LESSON1 = "lesson_one";
         public static final String COLUMN_LESSON2 = "lesson_two";
         public static final String COLUMN_LESSON3 = "lesson_three";
@@ -64,6 +64,8 @@ public class StudyJamAttendanceContract {
         public static Uri buildLessonsUriWithId(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }
+
+
     }
 
 }

@@ -21,6 +21,9 @@ public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public TextView userMail;
     public ImageView imageUser;
 
+    public int user_id;
+
+
     public UserViewHolder(Context context, View itemView) {
         super(itemView);
         this.context = context;
@@ -34,7 +37,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void onClick(View v) {
         //Toast.makeText(context, userName.getText().toString(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(context, DetailsActivity.class);
-        intent.putExtra(Utils.INTENT_EMAIL, userMail.getText().toString());
+        intent.putExtra(Utils.INTENT_USER_ID, user_id);
         context.startActivity(intent);
     }
 }

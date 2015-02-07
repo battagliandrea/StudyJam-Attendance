@@ -27,7 +27,7 @@ public class DetailsActivity extends ActionBarActivity {
 
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.container_details, new DetailsFragment())
                     .commit();
         }

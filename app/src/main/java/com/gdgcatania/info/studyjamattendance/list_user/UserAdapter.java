@@ -36,10 +36,12 @@ public class UserAdapter extends CursorRecyclerViewAdapter<UserViewHolder> {
     @Override
     public void onBindViewHolder(UserViewHolder viewHolder, Cursor cursor) {
 
+        int user_id = cursor.getInt(UserListFragment.COL_USERS_ID);
         String surname = cursor.getString(UserListFragment.COL_USERS_SURNAME);
         String name = cursor.getString(UserListFragment.COL_USERS_NAME);
         String email = cursor.getString(UserListFragment.COL_USERS_EMAIL);
 
+        viewHolder.user_id = user_id;
         viewHolder.userName.setText(surname + " " + name);
         viewHolder.userMail.setText(email);
         viewHolder.imageUser.setImageResource(R.mipmap.ic_launcher);

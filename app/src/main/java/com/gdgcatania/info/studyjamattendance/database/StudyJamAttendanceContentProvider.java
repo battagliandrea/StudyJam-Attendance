@@ -69,6 +69,7 @@ public class StudyJamAttendanceContentProvider extends ContentProvider{
                 );
                 break;
             }
+
             case LESSON: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         LessonsEntry.TABLE_NAME,
@@ -113,7 +114,7 @@ public class StudyJamAttendanceContentProvider extends ContentProvider{
             case LESSON_ID:
                 return LessonsEntry.CONTENT_ITEM_TYPE;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+            throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
     }
 
