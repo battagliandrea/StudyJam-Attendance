@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="list_divider">#ffffffff</color>
+    <color name="list_background">#ffffffff</color>
+    <color name="list_background_pressed">#fff0f0f0</color>
+    <color name="list_item_title">#ff5c63cc</color>
+    <color name="counter_text_bg">#FFCC0000</color>
+    <color name="counter_text_color" >#FFFFFFFF</color>
+
+    <item name="blue" type="color">#1976D2</item>
+    <item name="purple" type="color">#FFAA66CC</item>
+    <item name="green" type="color">#43A047</item>
+    <item name="yellow" type="color">#FFEB3B</item>
+    <item name="red" type="color">#E53935</item>
+    <item name="darkblue" type="color">#1565C0</item>
+    <item name="darkpurple" type="color">#FF9933CC</item>
+    <item name="darkgreen" type="color">#2E7D32</item>
+    <item name="darkyellow" type="color">#FBC02D</item>
+    <item name="darkred" type="color">#C62828</item>
+
+    <item name="white" type="color">#FFFFFFFF</item>
+    <item name="black" type="color">#FF000000</item>
+    <item name="lightgrey" type="color">#FFD8D8D8</item>
+    <item name="gray" type="color">#ff9b9b9b</item>
+    <item name="darkgray" type="color">#ff7d7d7d</item>
+
+    <item name="backgroundgrey" type="color">#ffe8e8e8</item>
+
+</resources>
