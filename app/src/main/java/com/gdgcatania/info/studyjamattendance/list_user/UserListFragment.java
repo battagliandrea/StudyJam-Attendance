@@ -1,11 +1,14 @@
 package com.gdgcatania.info.studyjamattendance.list_user;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
@@ -19,8 +22,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.gdgcatania.info.studyjamattendance.R;
+import com.gdgcatania.info.studyjamattendance.details_user.DetailsActivity;
+import com.gdgcatania.info.studyjamattendance.object.User;
 import com.gdgcatania.info.studyjamattendance.utils.Utils;
 import com.gdgcatania.info.studyjamattendance.service.StudyJamAttendanceService;
 import com.melnykov.fab.FloatingActionButton;
@@ -50,6 +56,9 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
 
+    private String [] lessonKey;
+    private String contentsQR;
+
     private StudyJamAttendanceReceiverUsers usersReceiver;
 
     public UserListFragment() {
@@ -65,6 +74,8 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        lessonKey =  this.getResources().getStringArray(R.array.lessons_keys);
 
         userAdapter = new UserAdapter(getActivity(), null);
 
@@ -86,6 +97,61 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
 
         return rootView;
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
+            if (resultCode == getActivity().RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                Log.i("Barcode Result", contents);
+                contentsQR = contents;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setItems(lessonKey, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        User user = getUserFromQrCode(contentsQR);
+                        Toast.makeText(getActivity(), user.getSurname() + " " + user.getName() + " --> Presente alla lezione n°:  " + (which+1) , Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.create();
+                builder.show();
+
+
+
+                // Handle successful scan
+            } else if (resultCode == getActivity().RESULT_CANCELED) {
+                // Handle cancel
+                Log.i("Barcode Result","Result canceled");
+            }
+        }
+    }
+
+
+    private User getUserFromQrCode(String id){
+
+        ContentResolver cr = getActivity().getContentResolver();
+        Uri userUri = UsersEntry.buildUsersUriWithId(String.valueOf(id));
+        final String[] USER_COLUMNS = {
+                UsersEntry.TABLE_NAME + "." + UsersEntry._ID,
+                UsersEntry.COLUMN_SURNAME,
+                UsersEntry.COLUMN_NAME,
+                UsersEntry.COLUMN_EMAIL
+        };
+
+        Cursor cursor = cr.query(userUri,USER_COLUMNS,null,null,null);
+
+        if (!cursor.moveToFirst()) { return null; }
+
+        User user = new User(
+                cursor.getInt(cursor.getColumnIndex(UsersEntry._ID)),
+                cursor.getString(cursor.getColumnIndex(UsersEntry.COLUMN_SURNAME)),
+                cursor.getString(cursor.getColumnIndex(UsersEntry.COLUMN_NAME)),
+                cursor.getString(cursor.getColumnIndex(UsersEntry.COLUMN_EMAIL))
+        );
+        return user;
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -132,6 +198,11 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoaderReset(Loader<Cursor> loader) {
         userAdapter.swapCursor(null);
     }
+
+
+
+
+
 
     public class StudyJamAttendanceReceiverUsers extends BroadcastReceiver {
 

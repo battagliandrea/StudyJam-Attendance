@@ -1,5 +1,6 @@
 package com.gdgcatania.info.studyjamattendance;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,8 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.gdgcatania.info.studyjamattendance.details_user.DetailsActivity;
 import com.gdgcatania.info.studyjamattendance.list_user.UserListFragment;
+import com.gdgcatania.info.studyjamattendance.utils.Utils;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -31,20 +35,13 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 65536) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-                Log.v("QR_Test", contents);
-
-                // Handle successful scan
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-            }
-        }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.container_main);
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
+
+
 
 
     @Override

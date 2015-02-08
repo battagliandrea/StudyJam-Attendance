@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import android.widget.TextView;
 
 import com.gdgcatania.info.studyjamattendance.R;
 import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContract.UsersEntry;
+import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContract.LessonsEntry;
+import com.gdgcatania.info.studyjamattendance.object.Lesson;
+import com.gdgcatania.info.studyjamattendance.object.User;
 import com.gdgcatania.info.studyjamattendance.utils.Utils;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -33,18 +37,26 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
     private DetailsAdapter detailsAdapter;
 
     private static final int USER_DETAILS_LOADER = 0;
+    private static final int LESSON_DETAILS_LOADER = 1;
 
     private static final String[] USER_COLUMNS = {
             UsersEntry.TABLE_NAME + "." + UsersEntry._ID,
             UsersEntry.COLUMN_SURNAME,
             UsersEntry.COLUMN_NAME,
-            UsersEntry.COLUMN_EMAIL,
+            UsersEntry.COLUMN_EMAIL
     };
 
-    private int user_id;
-    private String userSurname;
-    private String userName;
-    private String emailUser;
+    private static final String[] LESSONS_COLUMNS ={
+            LessonsEntry.TABLE_NAME + "." + UsersEntry._ID,
+            LessonsEntry.COLUMN_LESSON1,
+            LessonsEntry.COLUMN_LESSON2,
+            LessonsEntry.COLUMN_LESSON3,
+            LessonsEntry.COLUMN_LESSON4,
+            LessonsEntry.COLUMN_LESSON5,
+            LessonsEntry.COLUMN_LESSON6,
+            LessonsEntry.COLUMN_LESSON7,
+            LessonsEntry.COLUMN_LESSON8
+    };
 
     private TextView userNameTv;
     private TextView userEmailTv;
@@ -55,7 +67,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(USER_DETAILS_LOADER, null, this);
-
+        getLoaderManager().initLoader(LESSON_DETAILS_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -64,14 +76,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
                              Bundle savedInstanceState) {
         View detailsView = inflater.inflate(R.layout.fragment_details, container, false);
 
-        Intent intent = getActivity().getIntent();
-        Bundle bundle = intent.getExtras();
-        if(bundle!=null){
-            emailUser = bundle.getString(Utils.INTENT_USER_ID);
-        }
-
-        createAndPopulateLessonsArray();
-
+        lessons = new ArrayList<Integer>();
         detailsAdapter = new DetailsAdapter(getActivity(), lessons);
         recyclerView = (RecyclerView) detailsView.findViewById(R.id.fragment_details_list_lessons);
         recyclerView.setAdapter(detailsAdapter);
@@ -93,47 +98,85 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
 
-    private void createAndPopulateLessonsArray() {
-        lessons = new ArrayList<Integer>();
-        lessons.add(1);
-        lessons.add(1);
-        lessons.add(0);
-        lessons.add(0);
-        lessons.add(0);
-        lessons.add(0);
-        lessons.add(0);
-        lessons.add(0);
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         Intent intent = getActivity().getIntent();
         if (intent == null || !intent.hasExtra(Utils.INTENT_USER_ID)) {
             return null;
         }
+        int extraUserId = intent.getIntExtra(Utils.INTENT_USER_ID, -1);
 
-        user_id = intent.getIntExtra(Utils.INTENT_USER_ID, -1);
-        Uri userUri = UsersEntry.buildUsersUriWithId(String.valueOf(user_id));
 
-        return new CursorLoader(getActivity(),userUri,USER_COLUMNS,null,null,null);
+       switch(id){
+
+           case USER_DETAILS_LOADER:
+               Uri userUri = UsersEntry.buildUsersUriWithId(String.valueOf(extraUserId));
+              return new CursorLoader(getActivity(),userUri,USER_COLUMNS,null,null,null);
+
+           case LESSON_DETAILS_LOADER:
+               Uri lessonUri = LessonsEntry.buildLessonsUriWithId(String.valueOf(extraUserId));
+               return new CursorLoader(getActivity(),lessonUri,LESSONS_COLUMNS,null,null,null);
+
+           default:
+               return null;
+       }
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (!data.moveToFirst()) { return; }
+        switch (loader.getId()){
 
-        user_id = data.getInt(data.getColumnIndex(UsersEntry._ID));
-        userSurname = data.getString(data.getColumnIndex(UsersEntry.COLUMN_SURNAME));
-        userName = data.getString(data.getColumnIndex(UsersEntry.COLUMN_NAME));
-        emailUser = data.getString(data.getColumnIndex(UsersEntry.COLUMN_EMAIL));
+            case USER_DETAILS_LOADER:
+                if (!data.moveToFirst()) { return; }
 
-        userNameTv = (TextView) getView().findViewById(R.id.fragment_detail_name_textview);
-        userEmailTv = (TextView) getView().findViewById(R.id.fragment_details_email_textview);
+                User user = new User(
+                        data.getInt(data.getColumnIndex(UsersEntry._ID)),
+                        data.getString(data.getColumnIndex(UsersEntry.COLUMN_SURNAME)),
+                        data.getString(data.getColumnIndex(UsersEntry.COLUMN_NAME)),
+                        data.getString(data.getColumnIndex(UsersEntry.COLUMN_EMAIL))
+                );
 
-        userNameTv.setText(user_id + ". " + userSurname + " " + userName);
-        userEmailTv.setText(emailUser);
+                userNameTv = (TextView) getView().findViewById(R.id.fragment_detail_name_textview);
+                userEmailTv = (TextView) getView().findViewById(R.id.fragment_details_email_textview);
+                userNameTv.setText(user.getId() + ". " + user.getSurname() + " " + user.getName());
+                userEmailTv.setText(user.getEmail());
+                data.close();
 
+                break;
+
+            case LESSON_DETAILS_LOADER:
+                if (!data.moveToFirst()) { return; }
+
+                Lesson lesson = new Lesson(
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON1)),
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON2)),
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON3)),
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON4)),
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON5)),
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON6)),
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON7)),
+                        data.getInt(data.getColumnIndex(LessonsEntry.COLUMN_LESSON8))
+                );
+
+
+                lessons.add(lesson.getLesson1());
+                lessons.add(lesson.getLesson2());
+                lessons.add(lesson.getLesson3());
+                lessons.add(lesson.getLesson4());
+                lessons.add(lesson.getLesson5());
+                lessons.add(lesson.getLesson6());
+                lessons.add(lesson.getLesson7());
+                lessons.add(lesson.getLesson8());
+
+                data.close();
+            break;
+
+
+            default:
+                Log.v("ERRORE", "Nessun Loader");
+        }
     }
 
     @Override

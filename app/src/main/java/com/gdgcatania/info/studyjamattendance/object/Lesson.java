@@ -27,6 +27,17 @@ public class Lesson {
         this.lesson8 = lesson8;
     }
 
+    public Lesson(int lesson1, int lesson2, int lesson3, int lesson4, int lesson5, int lesson6, int lesson7, int lesson8) {
+        this.lesson1 = lesson1;
+        this.lesson2 = lesson2;
+        this.lesson3 = lesson3;
+        this.lesson4 = lesson4;
+        this.lesson5 = lesson5;
+        this.lesson6 = lesson6;
+        this.lesson7 = lesson7;
+        this.lesson8 = lesson8;
+    }
+
     public int getUserId() {
         return userId;
     }
