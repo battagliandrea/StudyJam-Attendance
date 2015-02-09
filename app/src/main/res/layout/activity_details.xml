@@ -9,7 +9,7 @@
     <!-- Toolbar -->
     <include
         android:id="@+id/toolbar_details"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar_no_elevation"/>
 
 
     <FrameLayout

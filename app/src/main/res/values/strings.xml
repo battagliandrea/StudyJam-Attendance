@@ -3,6 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_details">DetailsActivity</string>
 
+    <string name="details_attendance_default">Non ancora verificato!!</string>
+    <string name="details_attendance_presence">Presente!</string>
+    <string name="details_attendance_no_presence">Assente!</string>
+
     <string-array name="lessons_keys">
         <item>Lesson 1</item>
         <item>Lesson 2</item>

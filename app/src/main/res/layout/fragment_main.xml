@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@mipmap/ic_action_register"
+        android:src="@mipmap/ic_action_content_add"
         fab:fab_colorNormal="@color/blue"
         fab:fab_colorPressed="@color/darkblue"
         fab:fab_colorRipple="@color/darkblue" />

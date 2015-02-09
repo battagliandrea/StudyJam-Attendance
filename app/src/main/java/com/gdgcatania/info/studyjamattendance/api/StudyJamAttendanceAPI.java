@@ -6,6 +6,19 @@ import android.util.Log;
 import com.gdgcatania.info.studyjamattendance.object.Lesson;
 import com.gdgcatania.info.studyjamattendance.object.User;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +29,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Andrea on 05/02/2015.
@@ -49,7 +64,7 @@ public class StudyJamAttendanceAPI {
     private static String jsonStr;
 
 
-    public static ArrayList<User> getUsersJson(){
+    public static ArrayList<User> getUsersJson() {
         try {
             final String GDG_URL = "http://gdgcatania.info/api/getStudents";
             //final String QUERY_PARAM = "id";
@@ -90,7 +105,7 @@ public class StudyJamAttendanceAPI {
             Log.v(LOG_TAG, "JsonTest: " + jsonStr);
 
             try {
-                newsArray = getNews(jsonStr); //il mio arrayList contenente il json
+                newsArray = getUser(jsonStr); //il mio arrayList contenente il json
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -114,14 +129,14 @@ public class StudyJamAttendanceAPI {
         return newsArray;
     }
 
-    private static ArrayList<User> getNews(String jsonString) throws JSONException{
+    private static ArrayList<User> getUser(String jsonString) throws JSONException {
 
         //HO UN JSON ALL'INTERNO DI UN ALTRO JSON COSI' MI RESTITUISCE SEMPRE QUALCOSA
         JSONObject jsonObject = new JSONObject(jsonString);
         ArrayList<User> array = new ArrayList<User>();
 
         JSONArray jArr = jsonObject.getJSONArray(JSON_DATA);
-        for (int i=0; i < jArr.length(); i++) {
+        for (int i = 0; i < jArr.length(); i++) {
             JSONObject jsonData = jArr.getJSONObject(i);
             int user_id = jsonData.getInt(JSON_USERS_ID);
             String surname = jsonData.getString(JSON_USERS_SURNAME);
@@ -133,7 +148,7 @@ public class StudyJamAttendanceAPI {
         return array;
     }
 
-    public static ArrayList<Lesson> getLessonsJson(){
+    public static ArrayList<Lesson> getLessonsJson() {
         try {
             final String GDG_URL = "http://gdgcatania.info/api/getStudentsPresences";
             //final String QUERY_PARAM = "id";
@@ -198,14 +213,14 @@ public class StudyJamAttendanceAPI {
         return lessonsArray;
     }
 
-    private static ArrayList<Lesson> getLessons(String jsonString) throws JSONException{
+    private static ArrayList<Lesson> getLessons(String jsonString) throws JSONException {
 
         //HO UN JSON ALL'INTERNO DI UN ALTRO JSON COSI' MI RESTITUISCE SEMPRE QUALCOSA
         JSONObject jsonObject = new JSONObject(jsonString);
         ArrayList<Lesson> array = new ArrayList<Lesson>();
 
         JSONArray jArr = jsonObject.getJSONArray(JSON_DATA);
-        for (int i=0; i < jArr.length(); i++) {
+        for (int i = 0; i < jArr.length(); i++) {
             JSONObject jsonData = jArr.getJSONObject(i);
             int user_id = jsonData.getInt(JSON_LESSON_USER_ID);
             int lesson1 = jsonData.getInt(JSON_LESSON_1);
@@ -223,4 +238,38 @@ public class StudyJamAttendanceAPI {
         return array;
     }
 
+    public static void setUserAttendance(int user_id, int lesson_id) {
+        try {
+            JSONObject jsonobj = new JSONObject();
+            jsonobj.put("ID", user_id);
+            jsonobj.put("L_ID", lesson_id);
+
+            //String string = "{\"ID\"" + ":1,\"L_ID\"" + ":5}";
+
+            HttpPost post = new HttpPost("http://gdgcatania.info/api/registerPresence");
+
+            List<NameValuePair> pairs = new ArrayList<>();
+            pairs.add(new BasicNameValuePair("req", jsonobj.toString()));
+            post.setEntity(new UrlEncodedFormEntity(pairs));
+
+            Log.v(LOG_TAG, jsonobj.toString());
+
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpResponse resp = client.execute(post);
+
+            String responseText = null;
+            responseText = EntityUtils.toString(resp.getEntity());
+
+            JSONObject json = new JSONObject(responseText);
+            Log.v(LOG_TAG, json.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

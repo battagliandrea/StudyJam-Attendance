@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,16 +84,6 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        FloatingActionButton fab = (FloatingActionButton) detailsView.findViewById(R.id.fragment_details_add_lesson_button);
-        fab.attachToRecyclerView(recyclerView);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                startActivityForResult(intent, 0);*/
-            }
-        });
 
         return detailsView;
     }
@@ -138,9 +129,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
                         data.getString(data.getColumnIndex(UsersEntry.COLUMN_EMAIL))
                 );
 
-                userNameTv = (TextView) getView().findViewById(R.id.fragment_detail_name_textview);
                 userEmailTv = (TextView) getView().findViewById(R.id.fragment_details_email_textview);
-                userNameTv.setText(user.getId() + ". " + user.getSurname() + " " + user.getName());
                 userEmailTv.setText(user.getEmail());
                 data.close();
 
@@ -172,7 +161,6 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
 
                 data.close();
             break;
-
 
             default:
                 Log.v("ERRORE", "Nessun Loader");

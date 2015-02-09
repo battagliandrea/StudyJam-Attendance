@@ -14,9 +14,15 @@ public class Utils {
     public static final String BROADCAST_RECEIVER_KEY = "com.gdgcatania.info.studyjamattendance.service.receiver.KEY";
     //service tag
     public static final String SERVICE_USERS = "com.gdgcatania.info.studyjamattendance.service.service.USERS";
+    public static final String SERVICE_POST = "com.gdgcatania.info.studyjamattendance.service.service.POST";
+
 
     public static final String BROADCAST_RECEIVER_ACTION_USERS = "com.gdgcatania.info.studyjamattendance.service.service.receiver.intent.action.USERS";
 
-    public static final String INTENT_USER_ID = "DETAILS EMAIL";
+    //FLAG UTILIZZATI NEL PASSAGGIO DI PARAMETRI TRA INTENT
+    public static final String INTENT_USER_ID = "DETAILS ID";
+    public static final String INTENT_POST_ID = "POST ID";
+    public static final String INTENT_POST_L_ID = "POST LESSON ID";
+
 
 }

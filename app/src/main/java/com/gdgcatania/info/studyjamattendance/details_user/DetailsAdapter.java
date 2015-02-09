@@ -33,8 +33,17 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsViewHolder>{
 
     @Override
     public void onBindViewHolder(DetailsViewHolder detailsViewHolder, int position) {
-        int lesson = items.get(position);
-        detailsViewHolder.lessonName.setText("Lesson "+position+": "+ lesson);
+        int attendance = items.get(position);
+
+        detailsViewHolder.lessonName.setText("Lesson: "+(position+1));
+        if(attendance==1){
+            detailsViewHolder.lessonAttendence.setText(R.string.details_attendance_presence);
+        }else{
+            detailsViewHolder.lessonAttendence.setText(R.string.details_attendance_no_presence);
+        }
+
+
+
     }
 
     @Override

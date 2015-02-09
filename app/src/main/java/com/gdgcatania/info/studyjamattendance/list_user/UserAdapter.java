@@ -3,6 +3,7 @@ package com.gdgcatania.info.studyjamattendance.list_user;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.gdgcatania.info.studyjamattendance.R;
 import com.gdgcatania.info.studyjamattendance.utils.CursorRecyclerViewAdapter;
+import com.gdgcatania.info.studyjamattendance.utils.DefaultAvatarCreator;
 
 /**
  * Created by Andrea on 05/02/2015.
@@ -44,7 +46,9 @@ public class UserAdapter extends CursorRecyclerViewAdapter<UserViewHolder> {
         viewHolder.user_id = user_id;
         viewHolder.userName.setText(surname + " " + name);
         viewHolder.userMail.setText(email);
-        viewHolder.imageUser.setImageResource(R.mipmap.ic_launcher);
+        char c = surname.charAt(0);
+        viewHolder.imageUser.setImageBitmap(DefaultAvatarCreator.getclip(DefaultAvatarCreator.getDefaultAvatar("" + c, context)));
+
     }
 
     /*@Override

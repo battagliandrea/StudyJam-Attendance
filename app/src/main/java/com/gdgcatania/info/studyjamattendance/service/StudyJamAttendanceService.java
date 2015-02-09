@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.gdgcatania.info.studyjamattendance.api.StudyJamAttendanceAPI;
+import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContract;
 import com.gdgcatania.info.studyjamattendance.object.Lesson;
 import com.gdgcatania.info.studyjamattendance.object.User;
 
@@ -16,16 +17,17 @@ import java.util.ArrayList;
 
 import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContract.UsersEntry;
 import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContract.LessonsEntry;
+import com.gdgcatania.info.studyjamattendance.utils.Utils;
 
 /**
  * Created by Andrea on 05/02/2015.
  */
 public class StudyJamAttendanceService extends IntentService {
 
+    private String SERVICE_TAG;
     private String LOG_TAG = StudyJamAttendanceService.class.getSimpleName();
 
     ArrayList<User> JSonUsersArray;
-    ArrayList<Lesson> JSonLessonsArray;
 
     public StudyJamAttendanceService() {
         super("StudyJamAttendanceService");
@@ -33,9 +35,24 @@ public class StudyJamAttendanceService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        startUsersService();
-        startLessonsService();
 
+        SERVICE_TAG = intent.getStringExtra(Utils.SERVICE_KEY);
+
+        switch(SERVICE_TAG){
+            case Utils.SERVICE_USERS:
+                startUsersService();
+                startLessonsService();
+                break;
+            case Utils.SERVICE_POST:
+                int id = intent.getIntExtra(Utils.INTENT_POST_ID, -1);
+                int l_id = intent.getIntExtra(Utils.INTENT_POST_L_ID, -1);
+                StudyJamAttendanceAPI.setUserAttendance(id, l_id);
+                updateLessons(id, l_id);
+                break;
+            default:
+                Log.v(LOG_TAG, "NO SERVICE :(");
+                break;
+        }
     }
 
     public void startUsersService(){
@@ -109,7 +126,7 @@ public class StudyJamAttendanceService extends IntentService {
 
     private long addLessons(int user_id, int lesson1, int lesson2, int lesson3, int lesson4, int lesson5, int lesson6, int lesson7, int lesson8){
 
-        Log.v(LOG_TAG, "INSERT USERS " + user_id +","+ lesson1 +","+ lesson2 +","+ lesson3 +","+ lesson4 +","+ lesson4 +","+ lesson5 +","+ lesson6 +","+ lesson7 +","+ lesson8);
+        Log.v(LOG_TAG, "INSERT LESSON " + user_id +","+ lesson1 +","+ lesson2 +","+ lesson3 +","+ lesson4 +","+ lesson4 +","+ lesson5 +","+ lesson6 +","+ lesson7 +","+ lesson8);
 
         //verificare se esiste la posizione nel database
         Cursor cursor = getApplicationContext().getContentResolver().query(
@@ -144,5 +161,38 @@ public class StudyJamAttendanceService extends IntentService {
         }
     }
 
+    private int updateLessons(int id, int l_id){
+
+        ContentValues cv = new ContentValues();
+
+        switch(l_id){
+            case 1:
+                cv.put(LessonsEntry.COLUMN_LESSON1, 1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            case 2:
+                cv.put(LessonsEntry.COLUMN_LESSON2,1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            case 3:
+                cv.put(LessonsEntry.COLUMN_LESSON3,1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            case 4:
+                cv.put(LessonsEntry.COLUMN_LESSON4,1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            case 5:
+                cv.put(LessonsEntry.COLUMN_LESSON5,1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            case 6:
+                cv.put(LessonsEntry.COLUMN_LESSON6,1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            case 7:
+                cv.put(LessonsEntry.COLUMN_LESSON7,1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            case 8:
+                cv.put(LessonsEntry.COLUMN_LESSON8,1); //These Fields should be your String values of actual column names
+                return getContentResolver().update(LessonsEntry.CONTENT_URI, cv, LessonsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            default:
+                return 0;
+        }
+    }
 }
 

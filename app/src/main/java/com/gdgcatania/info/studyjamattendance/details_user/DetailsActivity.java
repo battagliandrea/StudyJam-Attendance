@@ -1,23 +1,48 @@
 package com.gdgcatania.info.studyjamattendance.details_user;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.gdgcatania.info.studyjamattendance.R;
+import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContract;
+import com.gdgcatania.info.studyjamattendance.object.Lesson;
+import com.gdgcatania.info.studyjamattendance.object.User;
+import com.gdgcatania.info.studyjamattendance.utils.Utils;
 
 
-public class DetailsActivity extends ActionBarActivity {
+public class DetailsActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    private static final int USER_DETAILS_LOADER = 0;
+    private static final String[] USER_COLUMNS = {
+            StudyJamAttendanceContract.UsersEntry.TABLE_NAME + "." + StudyJamAttendanceContract.UsersEntry._ID,
+            StudyJamAttendanceContract.UsersEntry.COLUMN_SURNAME,
+            StudyJamAttendanceContract.UsersEntry.COLUMN_NAME,
+            StudyJamAttendanceContract.UsersEntry.COLUMN_EMAIL
+    };
 
     private Toolbar toolbar;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        getLoaderManager().initLoader(USER_DETAILS_LOADER, null, this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_details);
         if (toolbar != null) {
@@ -54,5 +79,52 @@ public class DetailsActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Intent intent = getIntent();
+        if (intent == null || !intent.hasExtra(Utils.INTENT_USER_ID)) {
+            return null;
+        }
+        int extraUserId = intent.getIntExtra(Utils.INTENT_USER_ID, -1);
+
+        switch(id){
+            case USER_DETAILS_LOADER:
+                Uri userUri = StudyJamAttendanceContract.UsersEntry.buildUsersUriWithId(String.valueOf(extraUserId));
+                return new CursorLoader(this,userUri,USER_COLUMNS,null,null,null);
+
+            default:
+                return null;
+        }
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        switch (loader.getId()){
+
+            case USER_DETAILS_LOADER:
+                if (!data.moveToFirst()) { return; }
+
+                User user = new User(
+                        data.getInt(data.getColumnIndex(StudyJamAttendanceContract.UsersEntry._ID)),
+                        data.getString(data.getColumnIndex(StudyJamAttendanceContract.UsersEntry.COLUMN_SURNAME)),
+                        data.getString(data.getColumnIndex(StudyJamAttendanceContract.UsersEntry.COLUMN_NAME)),
+                        data.getString(data.getColumnIndex(StudyJamAttendanceContract.UsersEntry.COLUMN_EMAIL))
+                );
+
+                toolbar.setTitle(user.getId() + ". " + user.getSurname() + " " + user.getName());
+                data.close();
+
+                break;
+            default:
+                Log.v("ERRORE", "Nessun Loader");
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
