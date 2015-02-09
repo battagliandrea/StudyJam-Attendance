@@ -60,12 +60,16 @@ public class StudyJamAttendanceService extends IntentService {
         JSonUsersArray = StudyJamAttendanceAPI.getUsersJson();
         Log.v(LOG_TAG, "SERVICE: Start Users Service!! :)");
 
-        for (User users : JSonUsersArray){
-            //INSERISCE DATI ALL'INTERNO DEL DATABASE
-            addUsers(users.getId(), users.getSurname(), users.getName(),users.getEmail());
+        if(JSonUsersArray!=null){
+            for (User users : JSonUsersArray){
+                //INSERISCE DATI ALL'INTERNO DEL DATABASE
+                addUsers(users.getId(), users.getSurname(), users.getName(),users.getEmail());
+            }
+            Log.v(LOG_TAG, " INSERT USERS OK");
         }
 
-        Log.v(LOG_TAG, " INSERT USERS OK");
+
+
 
         /*Intent intentBroadcast = new Intent();
         intentBroadcast.setAction(Utils.BROADCAST_RECEIVER_ACTION_USERS);
@@ -78,19 +82,22 @@ public class StudyJamAttendanceService extends IntentService {
         ArrayList<Lesson> JSonLessonsArray = StudyJamAttendanceAPI.getLessonsJson();
         Log.v(LOG_TAG, "SERVICE: Start Lessons Service!! :)");
 
-        for (Lesson lessons : JSonLessonsArray){
-            //INSERISCE DATI ALL'INTERNO DEL DATABASE
-            addLessons(lessons.getUserId(),
-                    lessons.getLesson1(),
-                    lessons.getLesson2(),
-                    lessons.getLesson3(),
-                    lessons.getLesson4(),
-                    lessons.getLesson5(),
-                    lessons.getLesson6(),
-                    lessons.getLesson7(),
-                    lessons.getLesson8());
+        if(JSonLessonsArray!=null){
+            for (Lesson lessons : JSonLessonsArray){
+                //INSERISCE DATI ALL'INTERNO DEL DATABASE
+                addLessons(lessons.getUserId(),
+                        lessons.getLesson1(),
+                        lessons.getLesson2(),
+                        lessons.getLesson3(),
+                        lessons.getLesson4(),
+                        lessons.getLesson5(),
+                        lessons.getLesson6(),
+                        lessons.getLesson7(),
+                        lessons.getLesson8());
+            }
+            Log.v(LOG_TAG, " INSERT LESSON OK");
         }
-        Log.v(LOG_TAG, " INSERT LESSON OK");
+
     }
 
     private long addUsers(int user_id, String surname, String name, String email){

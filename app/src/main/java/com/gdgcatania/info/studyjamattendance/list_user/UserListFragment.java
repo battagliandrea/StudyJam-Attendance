@@ -105,23 +105,29 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
                 Log.i("Barcode Result", contents);
                 contentsQR = contents;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setItems(lessonKey, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                if(Integer.parseInt(contentsQR) > 0 && Integer.parseInt(contentsQR)<=3){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setItems(lessonKey, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
 
-                        User user = getUserFromQrCode(contentsQR);
-                        Toast.makeText(getActivity(), user.getSurname() + " " + user.getName() + " --> Presente alla lezione n°:  " + (which+1) , Toast.LENGTH_SHORT).show();
+                            User user = getUserFromQrCode(contentsQR);
+                            Toast.makeText(getActivity(), user.getSurname() + " " + user.getName() + " --> Presente alla lezione n°:  " + (which+1) , Toast.LENGTH_SHORT).show();
 
-                        //FACCIO PARTIRE UN SECONDO SERVIZIO PER FARE IL POST E L'UPDATE NEL DATABASE
-                        Intent serviceIntent = new Intent(getActivity(), StudyJamAttendanceService.class);
-                        serviceIntent.putExtra(Utils.SERVICE_KEY, Utils.SERVICE_POST);
-                        serviceIntent.putExtra(Utils.INTENT_POST_ID, user.getId());
-                        serviceIntent.putExtra(Utils.INTENT_POST_L_ID, (which+1));
-                        getActivity().startService(serviceIntent);
-                    }
-                });
-                builder.create();
-                builder.show();
+                            //FACCIO PARTIRE UN SECONDO SERVIZIO PER FARE IL POST E L'UPDATE NEL DATABASE
+                            Intent serviceIntent = new Intent(getActivity(), StudyJamAttendanceService.class);
+                            serviceIntent.putExtra(Utils.SERVICE_KEY, Utils.SERVICE_POST);
+                            serviceIntent.putExtra(Utils.INTENT_POST_ID, user.getId());
+                            serviceIntent.putExtra(Utils.INTENT_POST_L_ID, (which+1));
+                            getActivity().startService(serviceIntent);
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+                }else{
+                    Toast.makeText(getActivity(), "QR Code non valido!!" , Toast.LENGTH_SHORT).show();
+                }
+
+
 
                 // Handle successful scan
             } else if (resultCode == getActivity().RESULT_CANCELED) {

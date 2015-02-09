@@ -38,8 +38,10 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsViewHolder>{
         detailsViewHolder.lessonName.setText("Lesson "+(position+1));
         if(attendance==1){
             detailsViewHolder.lessonAttendence.setText(R.string.details_attendance_presence);
+            detailsViewHolder.imageLesson.setImageResource(R.mipmap.ic_action_attendance);
         }else{
             detailsViewHolder.lessonAttendence.setText(R.string.details_attendance_no_presence);
+            detailsViewHolder.imageLesson.setImageResource(R.mipmap.ic_action_no_attendance);
         }
 
 
