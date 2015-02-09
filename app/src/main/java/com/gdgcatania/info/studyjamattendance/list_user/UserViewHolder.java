@@ -54,9 +54,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     @Override
     public boolean onLongClick(View v) {
-
         lessonKey =  context.getResources().getStringArray(R.array.lessons_keys);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(R.string.details_dialog_message)
                 .setPositiveButton(R.string.details_dialog_positive, new DialogInterface.OnClickListener() {

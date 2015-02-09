@@ -22,21 +22,16 @@ public class MainActivity extends ActionBarActivity {
 
     private Toolbar toolbar;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(this.getResources().getColor(R.color.darkblue));
-
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -50,8 +45,6 @@ public class MainActivity extends ActionBarActivity {
         Fragment fragment = getFragmentManager().findFragmentById(R.id.container_main);
         fragment.onActivityResult(requestCode, resultCode, data);
     }
-
-
 
 
     @Override
