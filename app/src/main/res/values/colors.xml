@@ -7,6 +7,7 @@
     <color name="counter_text_bg">#FFCC0000</color>
     <color name="counter_text_color" >#FFFFFFFF</color>
 
+    <item name="light_blue" type="color">#ff7daed2</item>
     <item name="blue" type="color">#1976D2</item>
     <item name="purple" type="color">#FFAA66CC</item>
     <item name="green" type="color">#43A047</item>

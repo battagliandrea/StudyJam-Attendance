@@ -94,7 +94,6 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
                 startActivityForResult(intent, 0);
             }
         });
-
         return rootView;
     }
 
@@ -119,7 +118,6 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
                         serviceIntent.putExtra(Utils.INTENT_POST_ID, user.getId());
                         serviceIntent.putExtra(Utils.INTENT_POST_L_ID, (which+1));
                         getActivity().startService(serviceIntent);
-
                     }
                 });
                 builder.create();

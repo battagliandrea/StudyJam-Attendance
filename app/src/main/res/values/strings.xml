@@ -1,22 +1,28 @@
 <resources>
-    <string name="app_name">Study Jam Attendance</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_details">DetailsActivity</string>
+    <string name="app_name">Study Jam: Registro</string>
+    <string name="action_settings">Opzioni</string>
+    <string name="title_activity_details">Dettaglio</string>
 
     <string name="details_attendance_default">Non ancora verificato!!</string>
     <string name="details_attendance_presence">Presente!</string>
     <string name="details_attendance_no_presence">Assente!</string>
 
+    <string name="details_dialog_message">Aggiungere presenza?</string>
+    <string name="details_dialog_positive">Si</string>
+    <string name="details_dialog_negative">No</string>
+
     <string-array name="lessons_keys">
-        <item>Lesson 1</item>
-        <item>Lesson 2</item>
-        <item>Lesson 3</item>
-        <item>Lesson 4</item>
-        <item>Lesson 5</item>
-        <item>Lesson 6</item>
-        <item>Lesson 7</item>
-        <item>Lesson 8</item>
+        <item>Lezione 1</item>
+        <item>Lezione 2</item>
+        <item>Lezione 3</item>
+        <item>Lezione 4</item>
+        <item>Lezione 5</item>
+        <item>Lezione 6</item>
+        <item>Lezione 7</item>
+        <item>Lezione 8</item>
     </string-array>
+
+
 
 
 </resources>

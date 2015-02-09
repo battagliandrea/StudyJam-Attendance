@@ -24,7 +24,6 @@ import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContrac
 import com.gdgcatania.info.studyjamattendance.object.Lesson;
 import com.gdgcatania.info.studyjamattendance.object.User;
 import com.gdgcatania.info.studyjamattendance.utils.Utils;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 

@@ -35,7 +35,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsViewHolder>{
     public void onBindViewHolder(DetailsViewHolder detailsViewHolder, int position) {
         int attendance = items.get(position);
 
-        detailsViewHolder.lessonName.setText("Lesson: "+(position+1));
+        detailsViewHolder.lessonName.setText("Lesson "+(position+1));
         if(attendance==1){
             detailsViewHolder.lessonAttendence.setText(R.string.details_attendance_presence);
         }else{
