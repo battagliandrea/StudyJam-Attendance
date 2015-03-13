@@ -104,8 +104,9 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 Log.i("Barcode Result", contents);
                 contentsQR = contents;
-
-                if(Integer.parseInt(contentsQR) > 0 && Integer.parseInt(contentsQR)<=3){
+                int userID=Integer.parseInt(contentsQR);
+                Log.i("SJ Registro","QR letto: " +userID);
+                if(userID > 0 && userID<=40){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setItems(lessonKey, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
