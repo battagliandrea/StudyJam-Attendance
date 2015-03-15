@@ -8,8 +8,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.gdgcatania.info.studyjamattendance.MainActivity;
 import com.gdgcatania.info.studyjamattendance.api.StudyJamAttendanceAPI;
-import com.gdgcatania.info.studyjamattendance.database.StudyJamAttendanceContract;
 import com.gdgcatania.info.studyjamattendance.object.Lesson;
 import com.gdgcatania.info.studyjamattendance.object.User;
 
@@ -49,6 +49,17 @@ public class StudyJamAttendanceService extends IntentService {
                 StudyJamAttendanceAPI.setUserAttendance(id, l_id);
                 updateLessons(id, l_id);
                 break;
+            case Utils.SERVICE_ANALYTICS:
+                int lesson_id = intent.getIntExtra(Utils.INTENT_ANALYTICS_L_ID, -1);
+                int count = StudyJamAttendanceAPI.getLessonAttendance(lesson_id);
+
+                Intent broadcastIntent= new Intent();
+                broadcastIntent.setAction(Utils.BROADCAST_RECEIVER_ANALYTICS);
+                broadcastIntent.putExtra(Utils.COUNT, count);
+                broadcastIntent.putExtra(Utils.LESSON_ID, lesson_id);
+                sendBroadcast(broadcastIntent);
+
+                break;
             default:
                 Log.v(LOG_TAG, "NO SERVICE :(");
                 break;
@@ -72,7 +83,7 @@ public class StudyJamAttendanceService extends IntentService {
 
 
         /*Intent intentBroadcast = new Intent();
-        intentBroadcast.setAction(Utils.BROADCAST_RECEIVER_ACTION_USERS);
+        intentBroadcast.setAction(Utils.BROADCAST_RECEIVER_ANALYTICS);
         sendBroadcast(intentBroadcast);*/
     }
 

@@ -12,7 +12,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
@@ -55,6 +57,8 @@ public class StudyJamAttendanceAPI {
     private static final String JSON_LESSON_6 = "l6";
     private static final String JSON_LESSON_7 = "l7";
     private static final String JSON_LESSON_8 = "l8";
+
+    private static final String JSON_LESSON_COUNT = "Count";
 
     private static ArrayList<User> newsArray;
     private static ArrayList<Lesson> lessonsArray;
@@ -271,5 +275,60 @@ public class StudyJamAttendanceAPI {
             e.printStackTrace();
         }
 
+    }
+
+    public static int getLessonAttendance( int lesson_id) {
+
+        int lesson_count = -1;
+
+        try {
+
+            String url = "http://gdgcatania.info/api/getLessonCount";
+
+
+            JSONObject jsonobj = new JSONObject();
+            jsonobj.put("L_ID", lesson_id);
+
+            url += "?";
+            List<NameValuePair> pairs = new ArrayList<>();
+            pairs.add(new BasicNameValuePair("req", jsonobj.toString()));
+            String paramString = URLEncodedUtils.format(pairs, "utf-8");
+
+            HttpGet get = new HttpGet(url += paramString);
+
+            Log.v(LOG_TAG, url += paramString);
+
+            Log.v(LOG_TAG, jsonobj.toString());
+
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpResponse resp = client.execute(get);
+
+            String responseText = null;
+            responseText = EntityUtils.toString(resp.getEntity());
+
+            lesson_count = getLessonAnalytics(responseText);
+
+            JSONObject json = new JSONObject(responseText);
+            Log.v(LOG_TAG, json.toString() + "count: " + lesson_count);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lesson_count;
+    }
+
+
+    private static int getLessonAnalytics(String jsonString) throws JSONException {
+
+        //HO UN JSON ALL'INTERNO DI UN ALTRO JSON COSI' MI RESTITUISCE SEMPRE QUALCOSA
+        JSONObject jsonObject = new JSONObject(jsonString);
+        JSONObject jData = jsonObject.getJSONObject(JSON_DATA);
+        int count = jData.getInt(JSON_LESSON_COUNT);
+
+        return count;
     }
 }

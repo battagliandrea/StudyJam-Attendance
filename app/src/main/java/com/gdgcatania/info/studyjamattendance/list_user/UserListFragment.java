@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.gdgcatania.info.studyjamattendance.R;
-import com.gdgcatania.info.studyjamattendance.details_user.DetailsActivity;
 import com.gdgcatania.info.studyjamattendance.object.User;
 import com.gdgcatania.info.studyjamattendance.utils.Utils;
 import com.gdgcatania.info.studyjamattendance.service.StudyJamAttendanceService;
@@ -59,7 +58,7 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
     private String [] lessonKey;
     private String contentsQR;
 
-    private StudyJamAttendanceReceiverUsers usersReceiver;
+
 
     public UserListFragment() {
     }
@@ -174,15 +173,11 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onResume() {
-        IntentFilter filter =new IntentFilter(Utils.BROADCAST_RECEIVER_ACTION_USERS);
-        usersReceiver = new StudyJamAttendanceReceiverUsers();
-        getActivity().registerReceiver(usersReceiver, filter);
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        getActivity().unregisterReceiver(usersReceiver);
         super.onPause();
     }
 
@@ -210,30 +205,5 @@ public class UserListFragment extends Fragment implements LoaderManager.LoaderCa
         userAdapter.swapCursor(null);
     }
 
-
-
-
-
-
-    public class StudyJamAttendanceReceiverUsers extends BroadcastReceiver {
-
-        private String LOG_TAG = StudyJamAttendanceReceiverUsers.class.getSimpleName();
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            Log.v(LOG_TAG, "StudyJamAttendance Users_Received ");
-
-           /* Bundle extras = intent.getExtras();
-            if (extras != null) {
-                ArrayList<News> newsArray = extras.getParcelableArrayList(Utils.BROADCAST_RECEIVER_KEY);
-                if(newsArray != null) {
-                    newsMessage = newsArray;
-                }
-            } else {
-                Log.v(LOG_TAG, "no extras");
-            }*/
-        }
-    }
 
 }
